@@ -1,0 +1,188 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+
+```{r}
+setwd( 'C:/wdOfR')
+file <- read.csv('pancake.csv')
+library(ggplot2)
+time_slot <- factor(file$time_slot,levels=file$time_slot)
+number_of_customers <- file$number_of_customers
+
+ggplot(data=file,aes(x=time_slot,y=number_of_customers) )+
+  geom_bar(stat="identity",width=1,color="white",fill="orange2") +
+  geom_text(aes(label=number_of_customers),position=position_stack(vjust=0.8),color="white",size=5)+   
+  ggtitle("顧客人數")+theme(plot.title=element_text(hjust=0.5))+
+  labs(x="時段",y="人數")
+```
+
+```{r}
+setwd( 'C:/wdOfR')
+library(RColorBrewer)
+coul <- brewer.pal(10, "BuPu") 
+file <- read.csv('pancake.csv')
+proportion_all_day=file$proportion_all_day
+label_proportion=file$label_proportion
+Major_F <- paste(time_slot,":", label_proportion) 
+pie(proportion_all_day, labels = Major_F, main="顧客人數",col=coul)
+
+```
+
+```{r}
+setwd( 'C:/wdOfR')
+file <- read.csv('pancake.csv')
+ave_queueing_time <- file$ave_queueing_time
+library(ggplot2)
+library(RColorBrewer)
+coul <- c("indianred1","indianred1","lightsalmon1","brown4","brown3","lightsalmon1","brown3","brown3","brown2")
+
+ggplot(data=file,aes(x=time_slot,y=ave_queueing_time) )+
+  geom_bar(stat="identity",width=1,color="white",fill="royalblue1") +
+  geom_text(aes(label=ave_queueing_time ),position=position_stack(vjust=0.8),color="black",size=5)+ 
+  ggtitle("平均排隊時間")+theme(plot.title=element_text(hjust=0.5))+
+  labs(x="時段",y="排隊時間(min)")
+
+ave_waiting_time <- file$ave_waiting_time
+ggplot(data=file,aes(x=time_slot,y=ave_waiting_time ) )+
+  geom_bar(stat="identity",width=1,color="white",fill= "orchid") +
+  geom_text(aes(label=ave_waiting_time ),position=position_stack(vjust=0.8),color="white",size=5)+   
+  ggtitle("平均等餐時間")+theme(plot.title=element_text(hjust=0.5)) +
+  labs(x="時段",y="等餐時間(min)")
+
+ave_staying_time <- file$ave_staying_time
+ggplot(data=file,aes(x=time_slot,y=ave_staying_time) )+
+  geom_bar(stat="identity",width=1,color="white",fill=coul) +
+  geom_text(aes(label=ave_staying_time),position=position_stack(vjust=0.8),color="white",size=5)+   
+  ggtitle("平均總停留時間")+theme(plot.title=element_text(hjust=0.5)) +
+  labs(x="時段",y="總停留時間(min)")
+```
+```{r}
+setwd('C:/wdOfR')
+file <- read.csv('pancake.csv')
+coul <- c("royalblue1", "orchid") 
+df <-  read.csv('pancake.csv', row.names=1, check.names=FALSE)
+df <- df[1:2]
+df <- t(df) 
+
+barplot( as.matrix(df), main="平均停留時間",ylim=c(0,13), xlab="時段", ylab="總停留時間(min)", legend=rownames(df) ,beside=FALSE,col=coul,cex.names=0.5,space=0 )
+
+text(0.5,0.7,"1.35",col="white")
+text(1.5,0.7,"1.2",col="white")
+text(2.5,0.7,"1.17",col="white")
+text(3.5,1.7,"2.38",col="white")
+text(4.5,0.3,"0.57",col="white")
+text(5.5,0.3,"0.52",col="white")
+text(6.5,1.7,"2.13",col="white")
+text(7.5,2.7,"3.48",col="white")
+text(8.5,1.7,"2.57",col="white")
+
+text(0.5,4.8,"4.13",col="white")
+text(1.5,4.8,"4.13",col="white")
+text(2.5,4,"3.73",col="white")
+text(3.5,9.8,"7.9",col="white")
+text(4.5,7.6,"7.52",col="white")
+text(5.5,3.5,"3.48",col="white")
+text(6.5,7.9,"6.22",col="white")
+text(7.5,8.1,"5.13",col="white")
+text(8.5,5.8,"3.65",col="white")
+
+text(0.5,6,"5.48")
+text(1.5,6,"5.33")
+text(2.5,5.5,"4.9")
+text(3.5,10.8,"10.28")
+text(4.5,8.6,"8.09")
+text(5.5,4.5,"4")
+text(6.5,8.8,"8.35")
+text(7.5,9.1,"8.61")
+text(8.5,6.7,"6.22")
+```
+
+```{r}
+coul <- c("dodgerblue4", "indianred1") 
+group = c("Male","Female")
+value = c(71,74)
+df <- data.frame(group,value)
+pct <- round(value/sum(value)*100,digit=2)
+pct <- paste(group,":",pct,"%",sep="")  
+pie(value, labels = pct , main="男女比(9:00~12:00)", col=coul )
+
+value1 = c(67,73)
+df1 <- data.frame(group,value1)
+pct1 <- round(value1/sum(value1)*100,digit=2)
+pct1 <- paste(group,":",pct1,"%",sep="")  
+pie(value1, labels = pct1 , main="男女比(12:00~14:00)", col=coul )
+
+value2 = c(129,144)
+df2 <- data.frame(group,value2)
+pct2 <- round(value2/sum(value2)*100,digit=2)
+pct2 <- paste(group,":",pct2,"%",sep="")  
+pie(value2, labels = pct2 , main="男女比(14:00~18:00)", col=coul )
+
+
+value = c(267,291)
+df <- data.frame(group,value)
+pct <- round(value/sum(value)*100,digit=2)
+pct <- paste(group,":",pct,"%",sep="")  
+pie(value, labels = pct , main="男女比(9:00~18:00)", col=coul )
+```
+
+```{r}
+cou <- c("plum","lightgoldenrod1","lightcoral") 
+value = c(1,127,17)
+group = c("Children","Young people","Middle-aged")
+df <- data.frame(group,value)
+pct <- round(value/sum(value)*100,digit=2)
+pct <- paste(group,":",pct,"%",sep="")  
+pie(value, labels = pct , main="年齡層比(9:00~12:00)", col=cou)
+
+
+coul1 <- c("plum","lightgoldenrod1","lightcoral","orangered") 
+group = c("Children","Young people","Middle-aged","Elderly")
+value1 = c(1,125,6,9)
+df1 <- data.frame(group,value1)
+pct1 <- round(value1/sum(value1)*100,digit=2)
+pct1 <- paste(group,":",pct1,"%",sep="")  
+pie(value1, labels = pct1 , main="年齡層比(12:00~14:00)", col=coul1)
+
+value2 = c(7,236,16,14)
+df2 <- data.frame(group,value2)
+pct2 <- round(value2/sum(value2)*100,digit=2)
+pct2 <- paste(group,":",pct2,"%",sep="")  
+pie(value2, labels = pct2 , main="年齡層比(14:00~18:00)", col=coul1)
+
+
+value1 = c(8,488,39,23)
+df1 <- data.frame(group,value1)
+pct1 <- round(value1/sum(value1)*100,digit=2)
+pct1 <- paste(group,":",pct1,"%",sep="")  
+pie(value1, labels = pct1 , main="年齡層比(9:00~18:00)", col=coul1)
+```
+```{r}
+coul <- c("lightseagreen", "salmon") 
+group = c("校內","校外")
+value = c(122,23)
+df <- data.frame(group,value)
+pct <- round(value/sum(value)*100,digit=2)
+pct <- paste(group,":",pct,"%",sep="")  
+pie(value, labels = pct , main="校內/外(9:00~12:00)", col=coul )
+
+value1 = c(117,23)
+df1 <- data.frame(group,value1)
+pct1 <- round(value1/sum(value1)*100,digit=2)
+pct1 <- paste(group,":",pct1,"%",sep="")  
+pie(value1, labels = pct1 , main="校內/外(12:00~14:00)", col=coul )
+
+value2 = c(226,47)
+df2 <- data.frame(group,value2)
+pct2 <- round(value2/sum(value2)*100,digit=2)
+pct2 <- paste(group,":",pct2,"%",sep="")  
+pie(value2, labels = pct2 , main="校內/外(14:00~18:00)", col=coul )
+
+value = c(465,93)
+df <- data.frame(group,value)
+pct <- round(value/sum(value)*100,digit=2)
+pct <- paste(group,":",pct,"%",sep="")  
+pie(value, labels = pct , main="校內/外(9:00~18:00)", col=coul )
+```
